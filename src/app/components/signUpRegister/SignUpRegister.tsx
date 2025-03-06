@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import { useState } from "react";
 import Link from "next/link";
 import InputField from "../../components/inputField/InputField";
@@ -11,14 +11,12 @@ export default function SignUpRegister() {
     email: "",
     name: "",
     password: "",
-    confirmPassword: ""
+    confirmPassword: "",
   });
-  // Explicitly type error as string or null
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async () => {
-    // Basic validation
     if (formData.password !== formData.confirmPassword) {
       setError("Passwords don't match");
       return;
@@ -28,12 +26,17 @@ export default function SignUpRegister() {
     setError(null);
 
     try {
-      const response = await fetch('/api/register', {
-        method: 'POST',
+      const response = await fetch("/api/register", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          password: formData.password,
+          confirmPassword: formData.confirmPassword,
+        }),
       });
 
       const data = await response.json();
@@ -44,13 +47,15 @@ export default function SignUpRegister() {
           email: "",
           name: "",
           password: "",
-          confirmPassword: ""
+          confirmPassword: "",
         });
+        // Optionally redirect to sign-in page
+        // window.location.href = "/signIn";
       } else {
         setError(data.message || "Registration failed");
       }
     } catch (error) {
-      setError("An error occurred during registration");
+      setError("An error occurred. Please try again later.");
       console.error("Registration error:", error);
     } finally {
       setLoading(false);
@@ -59,71 +64,65 @@ export default function SignUpRegister() {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
   };
 
   return (
-    <main 
+    <main
       className="bg-[#0B101B] flex flex-col items-center justify-center"
       style={{
         backgroundImage: `url(${IMAGES.backgroundimg.src})`,
-        backgroundPositionX: '50%',
-        backgroundPositionY: '80%',
+        backgroundPositionX: "50%",
+        backgroundPositionY: "80%",
         backgroundRepeat: "no-repeat",
         width: "100%",
       }}
     >
-      <div 
-        className="z-30 w-full px-4 flex flex-col justify-evenly h-full items-center min-h-screen"
-      >
+      <div className="z-30 w-full px-4 flex flex-col justify-evenly h-full items-center min-h-screen">
         <h1 className="text-[36px] font-[800] mb-[50px] bg-gradient-to-r from-[#EB568E] to-[#144EE3] text-transparent bg-clip-text">
           Linkly
         </h1>
         <CustomText />
         <div className="w-full max-w-[660px] space-y-4 flex flex-col justify-center items-center">
-        <InputField 
-  name="email"
-  type="email" 
-  placeholder="Email" 
-  value={formData.email}
-  onChange={handleInputChange}
-/>
-<InputField 
-  name="name"
-  type="text" 
-  placeholder="Name" 
-  value={formData.name}
-  onChange={handleInputChange}
-/>
-<InputField 
-  name="password"
-  type="password" 
-  placeholder="Password" 
-  value={formData.password}
-  onChange={handleInputChange}
-/>
-<InputField
-  name="confirmPassword"
-  type="password"
-  placeholder="Confirm Password"
-  value={formData.confirmPassword}
-  onChange={handleInputChange}
-/>
+          <InputField
+            name="email"
+            type="email"
+            placeholder="Email"
+            value={formData.email}
+            onChange={handleInputChange}
+          />
+          <InputField
+            name="name"
+            type="text"
+            placeholder="Name"
+            value={formData.name}
+            onChange={handleInputChange}
+          />
+          <InputField
+            name="password"
+            type="password"
+            placeholder="Password"
+            value={formData.password}
+            onChange={handleInputChange}
+          />
+          <InputField
+            name="confirmPassword"
+            type="password"
+            placeholder="Confirm Password"
+            value={formData.confirmPassword}
+            onChange={handleInputChange}
+          />
         </div>
-        
-        {error && (
-          <div className="text-red-500 text-sm mt-2">
-            {error}
-          </div>
-        )}
-        
+
+        {error && <div className="text-red-500 text-sm mt-2">{error}</div>}
+
         <div>
-          <CustomButton 
-            title={loading ? "Registering..." : "Register"} 
-            width="268px" 
+          <CustomButton
+            title={loading ? "Registering..." : "Register"}
+            width="268px"
             onClick={handleSubmit}
             disabled={loading}
           />

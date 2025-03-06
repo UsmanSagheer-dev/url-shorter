@@ -5,12 +5,10 @@ import UserProfile from '../userProfile/UserProfile';
 
 const Header = () => {
   return (
-    <header className="flex flex-col md:flex-row items-center justify-between w-full px-5 py-4 bg-gray-900">
-      {/* Top row with Logo and UserProfile */}
+    <header className="flex flex-col md:flex-row items-center justify-between w-full px-5 py-4 bg-[#0b101b]">
       <div className="flex items-center justify-between w-full">
         <Logo />
         
-        {/* Original SearchBar - Visible on large screens only */}
         <div className="hidden md:block w-full max-w-[1000px]">
           <SearchBar />
         </div>
@@ -20,7 +18,6 @@ const Header = () => {
         </div>
       </div>
       
-      {/* New SearchBar - Visible on tablet and below, appears below */}
       <div className="w-full mt-4 md:hidden flex items-center">
         <SearchBar />
       </div>
